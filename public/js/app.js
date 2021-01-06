@@ -1,4 +1,37 @@
+function Countdown(options) {
+  var timer,
+  instance = this,
+  seconds = options.seconds || 10,
+  onUpdate = options.onUpdate || function () {},
+  onComplete = options.onComplete || function () {};
+
+  function decrementCounter() {
+    onUpdate(seconds);
+    if (seconds === 0) {
+      onComplete();
+      instance.stop();
+    }
+    seconds--;
+  }
+
+  this.start = function () {
+    clearInterval(timer);
+    timer = 0;
+    seconds = options.seconds;
+    timer = setInterval(decrementCounter, 1000);
+  };
+
+  this.stop = function () {
+    clearInterval(timer);
+  };
+}
+
 var socket = io.connect();
+var COUNTDOWNTIMER = new Countdown({  
+    seconds:5,  // number of seconds to count down
+    onUpdate: function(sec){console.log(sec);}, // callback for each second
+    onComplete: function(){ alert('counter ended!');} // final action
+});
 
 var app = angular.module( 'app', ['ngRoute'] ).config( function( $routeProvider, $locationProvider ) {
 	$routeProvider.when('/table-10/:tableId', {
