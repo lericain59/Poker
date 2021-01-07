@@ -35,9 +35,9 @@ var Table = function( id, name, eventEmitter, seatsCount, bigBlind, smallBlind, 
 	this.eventEmitter = eventEmitter;
 	// The pot with its methods
 	this.pot = new Pot;
-        // The number of milliseconds for autoplay blinds
+        // The number of seconds for autoplay blinds
         this.speed_blind = 5;
-        // The number of milliseconds for autoplay
+        // The number of seconds for autoplay
         this.speed_autoplay = 30;
         // Set autoplay
         this.autoplay = false;

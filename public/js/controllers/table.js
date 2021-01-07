@@ -326,16 +326,22 @@ app.controller('TableController', ['$scope', '$rootScope', '$http', '$routeParam
 
             var proposedBet = +$scope.table.biggestBet + $scope.table.bigBlind;
             $scope.betAmount = $scope.table.seats[$scope.mySeat].chipsInPlay < proposedBet ? $scope.table.seats[$scope.mySeat].chipsInPlay : proposedBet;
-            
+
+            /*
+             * Here a timer is added if $scope.table.autoplay = true
+             * to automate play             * 
+             */
             if ($scope.table.autoplay) {
                 if ($scope.table.testing) {
-                    addTimer($scope.table.speed_autoplay, $scope.call,  $scope);
+                    addTimer($scope.table.speed_autoplay, $scope.call, $scope);
                 } else {
-                    addTimer($scope.table.speed_autoplay, $scope.fold,  $scope);
+                    // If the player does not act in the time allowed, 
+                    // his hand will automatically folded
+                    addTimer($scope.table.speed_autoplay, $scope.fold, $scope);
                 }
-            }            
-            
-            
+            }
+
+
             $scope.$digest();
         });
 
@@ -344,10 +350,16 @@ app.controller('TableController', ['$scope', '$rootScope', '$http', '$routeParam
             $scope.actionState = 'actNotBettedPot';
 
             $scope.betAmount = $scope.table.seats[$scope.mySeat].chipsInPlay < $scope.table.bigBlind ? $scope.table.seats[$scope.mySeat].chipsInPlay : $scope.table.bigBlind;
-            
-            if ($scope.table.autoplay)
+            /*
+             * Here a timer is added if $scope.table.autoplay = true
+             * to automate play   
+             */
+            if ($scope.table.autoplay) {
+                // If the player does not act in the time allowed, 
+                // a 'check' is played automatically             
                 addTimer($scope.table.speed_autoplay, $scope.check, $scope);
-            
+            }
+
             $scope.$digest();
         });
 
@@ -355,12 +367,18 @@ app.controller('TableController', ['$scope', '$rootScope', '$http', '$routeParam
         socket.on('actOthersAllIn', function () {
             $scope.actionState = 'actOthersAllIn';
             if ($scope.table.autoplay) {
+                /*
+                 * Here a timer is added if $scope.table.autoplay = true
+                 * to automate play   
+                 */
                 if ($scope.table.testing) {
+                    // If the player does not act in the time allowed, 
+                    // a 'call' is played automatically                           
                     addTimer($scope.table.speed_autoplay, $scope.call, $scope);
                 } else {
                     addTimer($scope.table.speed_autoplay, $scope.fold, $scope);
                 }
-            }            
+            }
 
             $scope.$digest();
         });
